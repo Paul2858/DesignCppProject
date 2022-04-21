@@ -1,18 +1,43 @@
+// https://www.techiedelight.com/graph-implementation-using-stl/
 
+#include <iostream>
+#include <vector>
 
-template <class NodeType, class WeightType>
+struct Edge
+{
+    int src, dest, weight;
+};
 
-struct Edge{
-	NodeType start;
-	NodeType end;
-	WeightType weight;
+typedef pair<int, int> Pair;
 
-}
+class Graph
+{
+public:
+    vector<vector<Pair>> adjList;
 
-class Graph{
+    Graph(vector<Edge> const &edges, int n)
+    {
+        adjList.resize(n);
 
-	// Function that adds Edge structs to list
-	// Function that prints graph
+        for (auto &edge : edges)
+        {
+            int src = edge.src;
+            int dest = edge.dest;
+            int weight = edge.weight;
 
+            adjList[src].push_back(make_pair(dest, weight));
+        }
+    }
+};
 
+void printGraph(Graph const &graph, int n)
+{
+    for (int i = 0; i < n; i++)
+    {
+        for (Pair v : graph.adjList[i])
+        {
+            std::cout << "(" << i << ", " << v.first << ", " << v.second << ") ";
+        }
+        std::cout << std::endl;
+    }
 }
