@@ -1,0 +1,29 @@
+
+class PathFinder {
+
+concept GraphNode = {
+...
+{a > b} -> bool
+}
+concept GraphNode = {}
+
+concept GraphLike = {
+
+	...
+	{ g.adjMatrix[0] > } -> bool;
+}
+
+public:
+	PathFinder(GraphLike &g);
+	PathFinder(MatrixLike &m);
+	PathFinder(TreeLike &t);
+
+	AStar
+	Dijkstras
+	DFS
+	BFS
+
+private:
+	buildGraphFromMatrixLike;
+	Graph g;
+}
