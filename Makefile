@@ -1,12 +1,10 @@
-# CC = gcc
-# CXX = g++
-CC = g++
+CC  = gcc
+CXX = g++-11
 INCLUDES =
+CFLAGS   = -g -Wall $(INCLUDES)
 CXXFLAGS = -g -Wall $(INCLUDES) -std=c++20 -O3
-
-# -g for debugging info
-LDFLAGS = -g
-LDLIBS =
+LDFLAGS  = -g
+LDLIBS   =
 
 main: main.o Graph.o PathFinder.o
 main.o: main.cpp Graph.h PathFinder.h
@@ -22,7 +20,7 @@ test-concepts.o: test-concepts.cpp
 # PHONY = not a file
 .PHONY: clean
 clean:
-	rm -rf *.o a.out core main
+	rm -rf *.o a.out core main test-concepts
 
 # all builds multiple programs if needed, and cleans first
 .PHONY: all

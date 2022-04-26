@@ -1,4 +1,5 @@
 #include <concepts>
+#include <iterator>
 /*
 Concept for graph input: {adjacency matrix of: node type, node type, weight type} (weight type comparable)
 Concept for matrix input: {something indexable[][], free type}
@@ -21,50 +22,39 @@ Concept for matrix input: {something indexable[][], free type}
   ]
 */
 
-// requires equality_comparable_with<edge[2]>;
-// requires totally_ordered_with<edge[2]>;
-
 template<typename Val>
-concept Weight = requires {std::totally_ordered<Val>};
-// concept Weight = requires requires(Val a) {
-  // requires std::totally_ordered<a>;
-  // {a > b} -> var;
-  // requires std::convertible_to<var, bool>;
-  // requires std::convertible_to<Val>;
-  // std::convertible_to<A, bool>
-  // std::convertible_to<A, bool>;
-  // std::boolean-testable<{a < b}>;
-  // {a > b} -> std::boolean_testable<Val>;
-  // {a == b} -> std::boolean_testable<Val>;
-// }
+concept Weight = requires () {
+  requires std::totally_ordered<Val>;
+};
 
 template<typename Val>
 concept UniqueID = requires(Val a, Val b) {
   // can be used as a hash == unique id
-  {std::is_default_constructible<std::hash<Val>::value} -> false;
-  {std::is_copy_constructible<std::hash<Val>::value} -> false;
-  {std::is_move_constructible<std::hash<Val>::value} -> false;
-  {std::is_copy_assignable<std::hash<Val>::value} -> false;
-  {std::is_move_assignable<std::hash<Val>::value} -> false;
-}
+  requires !std::is_default_constructible<Val>();
+  requires !std::is_copy_constructible<Val>();
+  requires !std::is_move_constructible<Val>();
+  requires !std::is_copy_assignable<Val>();
+  requires !std::is_move_assignable<Val>();
+};
 
+template<typename S, typename D, typename W>
 struct Edge {
-  UniqueID src;
-  UniqueID dest;
-  Weight   weight;
-}
+  auto UniqueID(S);
+  auto UniqueID(D);
+  auto Weight(W);
+};
 
 template<typename GraphNodeList>
 concept GraphLike = requires(GraphNodeList list) {
-  requires forward_iterator<typename GraphNodeList::iterator>;
-  requires forward_iterator<typename GraphNodeList::const_iterator>;
-  { list.begin() } -> same_as<typename GraphNodeList::iterator>;
-  { list.end() } -> same_as<typename GraphNodeList::iterator>;
-  { list.begin() } -> same_as<typename GraphNodeList::const_iterator>;
-  { list.end() } -> same_as<typename GraphNodeList::const_iterator>;
-}
+  requires std::forward_iterator<typename GraphNodeList::iterator>;
+  requires std::forward_iterator<typename GraphNodeList::const_iterator>;
+  { list.begin() } -> std::same_as<typename GraphNodeList::iterator>;
+  { list.end() } -> std::same_as<typename GraphNodeList::iterator>;
+  { list.begin() } -> std::same_as<typename GraphNodeList::const_iterator>;
+  { list.end() } -> std::same_as<typename GraphNodeList::const_iterator>;
+};
 
-PathFinder(GraphLike<Edge> adjacencyList) {}
+// PathFinder(GraphLike<Edge> adjacencyList) {}
 
 /*
 template<typename CT>
