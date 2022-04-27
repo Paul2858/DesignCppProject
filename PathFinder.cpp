@@ -3,22 +3,14 @@
 #include <map>
 #include <algorithm>
 
-// class PathFinder {
-	/*
-	GeneralMapObject createPathFinder(){
-		// takes in as input the "map", start, finish and returns relevant object
-	}	
+// template<typename G, typename UID>
+// 	requires GraphLike(G) && UniqueID(UID)
+// std::vector<Edge> AStar(G &graph, UID start, UID end) {}
 
-	GeneralPath findShortestPath(){
-		// returns shortest path of a GeneralMapObject given start and end
-		// Runs Dijkstra if GeneralMapObject is graph
-		// Runs backtracking algorithm if maze/matrix
-	}
-	*/
-// };
-// std::vector<Edge>
 std::vector<int> PathFinder::AStar(Graph &graph, int start, int end) {
+// std::vector<ID> PathFinder::AStar(Graph &graph, ID start, ID end) {
 	std::vector<int> reconstructedPath;
+	// std::vector<ID> reconstructedPath;
 	std::set<int> openSet {start};
 	std::set<int> closedSet;
 
