@@ -1,4 +1,5 @@
-#include "Graph.h"
+// #include "Graph.h"
+#include "APathy.h"
 #include <string>
 #include <iostream>
 // #include "PathFinder.h"
@@ -49,26 +50,28 @@ Concept for matrix input: {something indexable[][], free type}
     ...
   }
 */
+// (x, y, w) —> edge from `x` to `y` having weight `w`
 struct Edge {
   std::string src, dest;
   int weight;
 };
 int main() {
   std::vector<Edge> edges = {
-    // (x, y, w) —> edge from `x` to `y` having weight `w`
-    {"heyo", "bro", 6}
-    //, {1, 2, 7}, {2, 0, 5}, {2, 1, 4}, {3, 2, 10}, {5, 4, 1}, {4, 5, 3}
+    {"0", "1", 6},
+    {"1", "2", 7},
+    {"2", "0", 5},
+    {"2", "1", 4},
+    {"3", "2", 10},
+    {"5", "4", 1},
+    {"4", "5", 3}
   };
-  Graph<Edge, std::string, int> graph(edges);
+  
+  APathy<Edge, std::string, int> finder(edges);
+  std::vector<std::string> sp = finder.AStar("3", "1");
 
-  std::cout << "(" << graph.adjList["heyo"][0].first << ", " << graph.adjList["heyo"][0].second << ")" << '\n';
-
-  PathFinder pf(graph);
-  // pf.AStart(3, 1);
-
-  // std::vector<int> sp = PathFinder::AStar(graph, 3, 1);
-  // std::cout << "Found path: [ ";
-  // for (int i : sp)
-  //   std::cout << i << ' ';
-  // std::cout << "]\n";
+  /* PRINT THE SHORTEST PATH IT FOUND */
+  std::cout << "Found path: [ ";
+  for (auto i : sp)
+    std::cout << i << ' ';
+  std::cout << "]\n";
 }

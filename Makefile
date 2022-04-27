@@ -14,7 +14,7 @@ Graph.o: Graph.cpp Graph.h
 PathFinder.o: PathFinder.cpp PathFinder.h
 
 test-concepts: test-concepts.o
-test-concepts.o: test-concepts.cpp
+test-concepts.o: APathy.cpp test-concepts.cpp
 
 # clean removes intermediate files
 # PHONY = not a file

@@ -17,7 +17,6 @@ concept EdgeLike = requires(E e) {
 };
 
 template<typename E, typename ID, typename W>
-  requires EdgeLike<E> && Weight<W>
 class Graph {
 public:
   std::unordered_map<ID, std::vector<std::pair<ID, W>>> adjList;

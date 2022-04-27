@@ -11,15 +11,9 @@
 //   { list.begin() } -> std::same_as<typename GraphNodeList::const_iterator>;
 //   { list.end() } -> std::same_as<typename GraphNodeList::const_iterator>;
 // };
-
+template<typename E, typename ID, typename W>
 class PathFinder {
 public:
-	// PathFinder(Graph g);
-  // template<typename G, typename UID>
-  //   requires GraphLike(G) && UniqueID(UID)
-	// static std::vector<Edge> AStar(G &graph, UID start, UID end);
-	static std::vector<int> AStar(Graph &graph, int start, int end);
-// private:
-// 	Graph &graph;
+	static std::vector<ID> AStar(Graph<E, ID, W> &graph, ID start, ID end);
 };
 #endif
