@@ -10,10 +10,8 @@ Concept for matrix input: {something indexable[][], free type}
 */
 /*
   GRAPH INPUT (list):
-
   {0, 1, 6}, {1, 2, 7}, {2, 0, 5}, {2, 1, 4}, {3, 2, 10}, {5, 4, 1}, {4, 5, 3}
   {0, 1},    {1, 2},    {2, 0}
-
   {Tile1.ID, Tile2.ID, Score}, {}{}
   map of node-type / id (or address) to int index
   +
@@ -72,6 +70,16 @@ int main() {
   /* PRINT THE SHORTEST PATH IT FOUND */
   std::cout << "Found path: [ ";
   for (auto i : sp)
+    std::cout << i << ' ';
+  std::cout << "]\n";
+
+
+  APathy<Edge, std::string, int> finderTwo(edges);
+  std::vector<std::string> sp2 = finder.Dijkstra("3", "1");
+
+  /* DIJKSTRA: PRINT THE SHORTEST PATH IT FOUND */
+  std::cout << "Found Dijkstra path: [ ";
+  for (auto i : sp2)
     std::cout << i << ' ';
   std::cout << "]\n";
 }

@@ -10,6 +10,10 @@
 #include <iostream>
 #include <typeinfo>
 
+// #######
+# define INF 0x3f3f3f3f
+// ######
+
 /************************ CONCEPTS ************************/
 template<typename WVal>
 concept Weight = requires () {
@@ -37,6 +41,8 @@ public:
       adjList[edge.src].push_back(std::make_pair(edge.dest, edge.weight));
     }
   };
+
+
   std::vector<ID> AStar(ID start, ID end) {
     std::vector<ID> reconstructedPath;
     std::set<ID> openSet {start};
@@ -96,5 +102,81 @@ public:
 
     return reconstructedPath;
   };
+
+  // ####################
+  std::vector<ID> Dijkstra(ID src, ID dest) {
+    // Create a set to store vertices that are being
+    // processed
+    std::set<std::pair<W, ID>> setds;
+    int V = adjList.size();
+
+    // Create a vector for distances and initialize all
+    // distances as infinite (INF)
+    std::map<ID, W> dist; // (V, INF);
+    std::map<ID, ID> prev_nodes;
+
+    setds.insert(make_pair(0, src));
+    dist[src] = 0;
+    prev_nodes[src] = src;
+
+    while (!setds.empty())
+    {
+        // The first vertex in Set is the minimum distance
+        // vertex, extract it from set.
+        // --- Pair tmp = *(setds.begin());
+        std::pair<W, ID> tmp =  *(setds.begin());
+        setds.erase(setds.begin());
+ 
+        // vertex label is stored in second of pair
+        ID u = tmp.second;
+ 
+        typename std::vector<std::pair<ID, W>>::iterator i;
+        // --- for (i = adjList[u].begin(); i != adjList[u].end(); ++i)
+        for (i = adjList[u].begin(); i != adjList[u].end(); ++i)
+        {   
+            // Get vertex label and weight of current adjacent of u.
+            ID v = (*i).first;
+            W weight = (*i).second;
+            
+            // ########
+            if (dist.find(v) == dist.end()) {
+              dist[v] = INF;
+            }
+            // #######
+
+            //    If there is shorter path to v through u.
+            if (dist[v] > dist[u] + weight)
+            {
+                /*  If distance of v is not INF then it must be in
+                    our set, so removing it and inserting again
+                    with updated less distance. */
+                // --- if (dist[v] != INF) {
+                // if (dist.find(v) != dist.end()) {
+                //     setds.erase(setds.find(make_pair(dist[v], v)));
+                // }
+                if (dist[v] != INF) {
+                    setds.erase(setds.find(make_pair(dist[v], v)));
+                }
+ 
+                // Updating distance of v
+                dist[v] = dist[u] + weight;
+                // Updating the list of previous nodes
+                prev_nodes[v] = u;
+                setds.insert(make_pair(dist[v], v));
+            }
+        }
+    }
+
+    std::vector<ID> path;
+    while (prev_nodes[dest] != dest) {
+        path.push_back(dest);
+        dest = prev_nodes[dest];
+    }
+    path.push_back(src);
+
+    std::reverse(path.begin(), path.end());
+    return path;
+  };
+
 };
 #endif
