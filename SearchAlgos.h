@@ -5,7 +5,7 @@
 class SearchAlgos
 {
 public:
-    static void BreadthFirstSearch(Graph &graph, int start);
-    static void DepthFirstSearch(Graph &graph, int start);
+    static std::vector<int> BreadthFirstSearch(Graph &graph, int start, int target);
+    static std::vector<int> DepthFirstSearch(Graph &graph, int start, int target);
 };
 #endif

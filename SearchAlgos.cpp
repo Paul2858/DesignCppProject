@@ -3,20 +3,26 @@
 #include <map>
 #include <deque>
 
-void SearchAlgos::BreadthFirstSearch(Graph &graph, int start)
+std::vector<int> SearchAlgos::BreadthFirstSearch(Graph &graph, int start, int target)
 {
     std::vector<bool> visited(graph.adjList.size(), false);
     std::deque<int> stack;
+    std::vector<int> path;
+
     stack.push_back(start);
 
     while (!stack.empty())
     {
         int s = stack.back();
+        if (s == target)
+            return path;
+
         stack.pop_front();
 
         if (!visited[s])
         {
-            std::cout << s << " ";
+            path.push_back(s);
+            //std::cout << s << " ";
             visited[s] = true;
         }
 
@@ -26,22 +32,29 @@ void SearchAlgos::BreadthFirstSearch(Graph &graph, int start)
                 stack.push_back((*i).first);
         }
     }
+    return {};
 }
 
-void SearchAlgos::DepthFirstSearch(Graph &graph, int start)
+std::vector<int> SearchAlgos::DepthFirstSearch(Graph &graph, int start, int target)
 {
     std::vector<bool> visited(graph.adjList.size(), false);
     std::stack<int> stack;
+    std::vector<int> path;
+
     stack.push(start);
 
     while (!stack.empty())
     {
         int s = stack.top();
+        if (s == target)
+            return path;
+
         stack.pop();
 
         if (!visited[s])
         {
-            std::cout << s << " ";
+            path.push_back(s);
+            //std::cout << s << " ";
             visited[s] = true;
         }
 
@@ -51,4 +64,5 @@ void SearchAlgos::DepthFirstSearch(Graph &graph, int start)
                 stack.push((*i).first);
         }
     }
+    return {};
 }
