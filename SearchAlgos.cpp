@@ -3,17 +3,17 @@
 #include <map>
 #include <deque>
 
-std::vector<int> SearchAlgos::BreadthFirstSearch(Graph &graph, int start, int target)
+std::vector<ID> SearchAlgos::BreadthFirstSearch(ID start, ID target)
 {
-    std::vector<bool> visited(graph.adjList.size(), false);
-    std::deque<int> stack;
-    std::vector<int> path;
+    std::vector<bool> visited(adjList.size(), false);
+    std::deque<ID> stack;
+    std::vector<ID> path;
 
     stack.push_back(start);
 
     while (!stack.empty())
     {
-        int s = stack.back();
+        ID s = stack.back();
         if (s == target)
             return path;
 
@@ -26,7 +26,7 @@ std::vector<int> SearchAlgos::BreadthFirstSearch(Graph &graph, int start, int ta
             visited[s] = true;
         }
 
-        for (auto i = graph.adjList[s].begin(); i != graph.adjList[s].end(); ++i)
+        for (auto i = adjList[s].begin(); i != adjList[s].end(); ++i)
         {
             if (!visited[(*i).first])
                 stack.push_back((*i).first);
@@ -35,17 +35,17 @@ std::vector<int> SearchAlgos::BreadthFirstSearch(Graph &graph, int start, int ta
     return {};
 }
 
-std::vector<int> SearchAlgos::DepthFirstSearch(Graph &graph, int start, int target)
+std::vector<ID> SearchAlgos::DepthFirstSearch(ID start, ID target)
 {
-    std::vector<bool> visited(graph.adjList.size(), false);
-    std::stack<int> stack;
-    std::vector<int> path;
+    std::vector<bool> visited(adjList.size(), false);
+    std::stack<ID> stack;
+    std::vector<ID> path;
 
     stack.push(start);
 
     while (!stack.empty())
     {
-        int s = stack.top();
+        ID s = stack.top();
         if (s == target)
             return path;
 
@@ -58,7 +58,7 @@ std::vector<int> SearchAlgos::DepthFirstSearch(Graph &graph, int start, int targ
             visited[s] = true;
         }
 
-        for (auto i = graph.adjList[s].begin(); i != graph.adjList[s].end(); ++i)
+        for (auto i = adjList[s].begin(); i != adjList[s].end(); ++i)
         {
             if (!visited[(*i).first])
                 stack.push((*i).first);
