@@ -11,6 +11,8 @@
 #include <deque>
 #include <stack>
 
+# define INF 0x3f3f3f3f
+
 /************************ CONCEPTS ************************/
 template<typename WVal>
 concept Weight = requires () {
@@ -179,6 +181,82 @@ public:
           }
       }
       return {};
+  };
+  std::vector<ID> Dijkstra(ID start, ID end) {
+    using namespace std;
+    typedef std::pair<int, W> Pair;
+    int src = getIdx(start);
+    // std::vector<std::vector<int, W> > adj = adjList;
+
+    int V = adjList.size();
+
+    // Create a set to store vertices that are being
+    // processed
+    std::set< Pair > setds;
+ 
+    // Create a vector for distances and initialize all
+    // distances as infinite (INF)
+    std::vector<int> dist(V, INF);
+    std::vector<int> prev_nodes(V, -1);
+ 
+    // Insert source itself in Set and initialize its
+    // distance as 0.
+    setds.insert(make_pair(0, src));
+    dist[src] = 0;
+ 
+    /* Looping till all shortest distance are finalized
+       then setds will become empty    */
+    while (!setds.empty())
+    {
+        // The first vertex in Set is the minimum distance
+        // vertex, extract it from set.
+        Pair tmp = *(setds.begin());
+        setds.erase(setds.begin());
+ 
+        // vertex label is stored in second of pair
+        int u = tmp.second;
+ 
+        typename vector<Pair>::iterator i;
+        for (i = adjList[u].begin(); i != adjList[u].end(); ++i)
+        {
+            // Get vertex label and weight of current adjacent of u.
+            int v = (*i).first;
+            int weight = (*i).second;
+            // printf("u, v, weight: %d %d %d\n", u, v, weight);
+ 
+            //    If there is shorter path to v through u.
+            if (dist[v] > dist[u] + weight)
+            {
+                /*  If distance of v is not INF then it must be in
+                    our set, so removing it and inserting again
+                    with updated less distance. */
+                if (dist[v] != INF) {
+                    setds.erase(setds.find(make_pair(dist[v], v)));
+                }
+ 
+                // Updating distance of v
+                dist[v] = dist[u] + weight;
+                // Updating the list of previous nodes
+                prev_nodes[v] = u;
+                setds.insert(make_pair(dist[v], v));
+            }
+        }
+    }
+
+    // the value target=4 below is just a placeholder to demo that 
+    // we can get a path from source to target. we could later add
+    // a functionality where a use puts a target and we return 
+    // the shortest path.
+    int target = getIdx(end);
+    std::vector<ID> path;
+    while (prev_nodes[target] != -1) {
+        path.push_back(vals[target]);
+        target = prev_nodes[target];
+    }
+    path.push_back(vals[target]);
+
+    std::reverse(path.begin(), path.end());
+    return path;
   };
   void printAdjList() {
     std::cout << "{\n";
