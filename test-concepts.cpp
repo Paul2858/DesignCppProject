@@ -78,7 +78,9 @@ int main() {
   finder.printVals();
   std::cout << "ADJ LIST:\n";
   finder.printAdjList();
-  std::vector<std::string> sp = finder.AStar("3", "1");
+  // std::vector<std::string> sp = finder.AStar("3", "1");
+  std::vector<std::string> sp = finder.BreadthFirstSearch("3", "1");
+  // std::vector<std::string> sp = finder.DepthFirstSearch("3", "1");
 
   /* EXAMPLE 2 arbitrary struct as node ids */
   // struct PointEdge {

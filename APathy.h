@@ -8,6 +8,8 @@
 #include <map>
 #include <algorithm>
 #include <iostream>
+#include <deque>
+#include <stack>
 
 /************************ CONCEPTS ************************/
 template<typename WVal>
@@ -111,6 +113,72 @@ public:
     }
 
     return reconstructedPath;
+  };
+  std::vector<ID> BreadthFirstSearch(ID start, ID target) {
+    std::vector<bool> visited(adjList.size(), false);
+    std::deque<ID> stack;
+    std::vector<ID> path;
+
+    stack.push_back(start);
+
+    while (!stack.empty())
+    {
+        ID s = stack.back();
+        int sIdx = getIdx(s);
+        if (s == target) {
+            path.push_back(s);
+            return path;
+        }
+
+        stack.pop_front();
+
+        if (!visited[sIdx])
+        {
+            path.push_back(s);
+            //std::cout << s << " ";
+            visited[sIdx] = true;
+        }
+
+        for (auto i = adjList[sIdx].begin(); i != adjList[sIdx].end(); ++i)
+        {
+            if (!visited[(*i).first])
+                stack.push_back(vals[(*i).first]);
+        }
+    }
+    return {};
+  };
+  std::vector<ID> DepthFirstSearch(ID start, ID target) {
+      std::vector<bool> visited(adjList.size(), false);
+      std::stack<ID> stack;
+      std::vector<ID> path;
+
+      stack.push(start);
+
+      while (!stack.empty())
+      {
+          ID s = stack.top();
+          int sIdx = getIdx(s);
+          if (s == target) {
+              path.push_back(s);
+              return path;
+          }
+
+          stack.pop();
+
+          if (!visited[sIdx])
+          {
+              path.push_back(s);
+              //std::cout << s << " ";
+              visited[sIdx] = true;
+          }
+
+          for (auto i = adjList[sIdx].begin(); i != adjList[sIdx].end(); ++i)
+          {
+              if (!visited[(*i).first])
+                  stack.push(vals[(*i).first]);
+          }
+      }
+      return {};
   };
   void printAdjList() {
     std::cout << "{\n";
