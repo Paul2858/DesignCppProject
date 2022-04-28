@@ -20,7 +20,7 @@ test-concepts.o: APathy.cpp test-concepts.cpp
 # PHONY = not a file
 .PHONY: clean
 clean:
-	rm -rf *.o a.out core main test-concepts
+	rm -rf *.o a.out core main test-concepts *.dSYM
 
 # all builds multiple programs if needed, and cleans first
 .PHONY: all

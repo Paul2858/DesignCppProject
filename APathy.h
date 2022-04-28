@@ -8,7 +8,6 @@
 #include <map>
 #include <algorithm>
 #include <iostream>
-#include <typeinfo>
 
 /************************ CONCEPTS ************************/
 template<typename WVal>
@@ -27,51 +26,68 @@ template<typename E, typename ID, typename W>
   requires EdgeLike<E> && Weight<W>
 class APathy {
 public:
-  std::unordered_map<ID, std::vector<std::pair<ID, W>>> adjList;
-  APathy(std::vector<E> &edges) {
+  APathy(std::vector<E> &edges, int n) {
+    adjList.resize(n);
+    int i = 0;
     for (auto &edge : edges) {
-      if (adjList.find(edge.src) == adjList.end()) {
-        std::vector<std::pair<ID, W>> newVector;
-        adjList[edge.src] = newVector;
+      int foundSrc  = -1;
+      int foundDest = -1;
+      for ( const auto &[key, value]: vals ) {
+        if (value == edge.src) {
+          foundSrc = key;
+        }
+        if (value == edge.dest) {
+          foundDest = key;
+        }
       }
-      adjList[edge.src].push_back(std::make_pair(edge.dest, edge.weight));
+      if (foundSrc == -1) {
+        foundSrc = i;
+        vals[foundSrc] = edge.src;
+        i++;
+      }
+      if (foundDest == -1) {
+        foundDest = i;
+        vals[foundDest] = edge.dest;
+        i++;
+      }
+      adjList[foundSrc].push_back(std::make_pair(foundDest, edge.weight));
     }
   };
   std::vector<ID> AStar(ID start, ID end) {
     std::vector<ID> reconstructedPath;
-    std::set<ID> openSet {start};
-    std::set<ID> closedSet;
 
-    std::map<ID, W> g;
-    std::map<ID, ID> parents;
+    int startIdx = getIdx(start);
+    std::set<int> openSet {startIdx};
+    std::set<int> closedSet;
 
-    g[start] = 0;
-    parents[start] = start;
+    std::map<int, W> g;
+    std::map<int, int> parents;
+
+    g[startIdx] = 0;
+    parents[startIdx] = startIdx;
 
     while (openSet.size() > 0) {
-      ID blank;
-      ID n;
-      for (ID v : openSet) {
-        // if (n == NULL || (g[v] + 1 /* heuristic [v] */ < g[n] + 1 /* heuristic [n] */ )) {
-        if (n == blank || (g[v] + 1) < (g[n] + 1)) {
+      int n = -1;
+      for (int v : openSet) {
+        if (n == -1 || (g[v] + 1 /* heuristic [v] */ < g[n] + 1 /* heuristic [n] */ )) {
           n = v;
         }
       }
 
-      if (n == blank) {
+      if (n == -1) {
         return reconstructedPath;
       }
-      if (n == end) {
+      if (vals[n] == end) {
         while (parents[n] != n) {
-          reconstructedPath.push_back(n);
+          reconstructedPath.push_back(vals[n]);
           n = parents[n];
         }
         reconstructedPath.push_back(start);
         std::reverse(reconstructedPath.begin(), reconstructedPath.end());
         return reconstructedPath;
       }
-      for (auto pair : adjList[n]) {
-        ID m = pair.first;
+      for (auto &pair : adjList[n]) {
+        int m = pair.first;
         W weight = pair.second;
         if (std::find(openSet.begin(), openSet.end(), m) == openSet.end() ||
             std::find(closedSet.begin(), openSet.end(), m) == closedSet.end()) {
@@ -95,6 +111,34 @@ public:
     }
 
     return reconstructedPath;
+  };
+  void printAdjList() {
+    std::cout << "{\n";
+    for (int i = 0; i < (int) adjList.size(); i++) {
+      std::cout << '\t' << vals[i] << ": [ ";
+      for (int j = 0; j < (int) adjList[i].size(); j++)
+        std::cout << "(" << vals[adjList[i][j].first] << "," << adjList[i][j].second << ") ";
+      std::cout << "]\n";
+    }
+    std::cout << "}\n";
+  };
+  void printVals() {
+    std::cout << "{\n";
+    for ( const auto &[key, value]: vals ) {
+      std::cout << '\t' << key << ": " << value << '\n';
+    }
+    std::cout << "}\n";
+  };
+private:
+  std::vector<std::vector<std::pair<int, W>>> adjList;
+  std::unordered_map<int, ID> vals;
+  int getIdx(ID &id) {
+    for ( const auto &[key, value]: vals ) {
+      if (value == id) {
+        return key;
+      }
+    }
+    return -1;
   };
 };
 #endif
