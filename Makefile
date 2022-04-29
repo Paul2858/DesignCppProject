@@ -10,7 +10,7 @@ LDLIBS   =
 # PHONY = not a file
 .PHONY: clean
 clean:
-	rm -rf *.o a.out *.dSYM .vscode points
+	rm -rf *.o a.out *.dSYM .vscode points movies
 
 # all builds multiple programs if needed, and cleans first
 .PHONY: all

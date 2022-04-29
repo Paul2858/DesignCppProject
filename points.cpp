@@ -1,6 +1,14 @@
 #include "APathy.h"
 #include <string>
 #include <iostream>
+#include <chrono>
+
+// g++-11 -std=c++20 -g -Wall -O3 points.cpp -o points && ./points
+using namespace std::chrono;
+void printDuration (const duration<double>& d) {
+  const auto ms = duration_cast<microseconds>(d);
+  std::cout << (float) ms.count() / 1000;
+}
 
 struct Point {
   std::string id;
@@ -50,32 +58,80 @@ int main() {
     {J, K, 5.0},
     {L, J, 2.0}
   };
-  APathy<PointEdge, Point, float> finder(edges, 12);;
-  std::vector<Point> sp = finder.Dijkstra(A, F);
+
+  auto start = high_resolution_clock::now();
+
+
+  APathy<PointEdge, Point, float> finder(edges, 12);
+
+
+  auto end = high_resolution_clock::now();
+  duration<double> diff = end - start;
+  std::cout << "Initialized *APathy* in ";
+  printDuration(diff);
+  std::cout << "ms\n";
+
+  start = high_resolution_clock::now();
+
+
+  std::vector<Point> sp = finder.Dijkstra(A, K);
+
+
+  end = high_resolution_clock::now();
+  diff = end - start;
 
   std::cout << "Dijkstra found path: [ ";
   for (auto i : sp)
     std::cout << i << ' ';
-  std::cout << "]\n";
+  std::cout << "] in ";
+  printDuration(diff);
+  std::cout << "ms\n";
 
-  sp = finder.AStar(A, F, &basicHeuristic);
+  start = high_resolution_clock::now();
+
+
+  sp = finder.AStar(A, K, &basicHeuristic);
+
+
+  end = high_resolution_clock::now();
+  diff = end - start;
 
   std::cout << "AStar found path: [ ";
   for (auto i : sp)
     std::cout << i << ' ';
-  std::cout << "]\n";
+  std::cout << "] in ";
+  printDuration(diff);
+  std::cout << "ms\n";
 
-  sp = finder.BreadthFirstSearch(A, F);
+  start = high_resolution_clock::now();
+
+
+  sp = finder.BreadthFirstSearch(A, K);
+
+
+  end = high_resolution_clock::now();
+  diff = end - start;
 
   std::cout << "BreadthFirstSearch found traversal: [ ";
   for (auto i : sp)
     std::cout << i << ' ';
-  std::cout << "]\n";
+  std::cout << "] in ";
+  printDuration(diff);
+  std::cout << "ms\n";
 
-  sp = finder.DepthFirstSearch(A, F);
+  start = high_resolution_clock::now();
+
+
+  sp = finder.DepthFirstSearch(A, K);
+
+
+  end = high_resolution_clock::now();
+  diff = end - start;
 
   std::cout << "DepthFirstSearch found traversal: [ ";
   for (auto i : sp)
     std::cout << i << ' ';
-  std::cout << "]\n";
+  std::cout << "] in ";
+  printDuration(diff);
+  std::cout << "ms\n";
 }

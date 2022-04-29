@@ -2,6 +2,7 @@
 #include <string>
 #include <iostream>
 
+// g++-11 -std=c++20 -g -Wall -O3 invalid.cpp -o invalid && ./invalid
 struct Point {
   std::string id;
   int x, y;

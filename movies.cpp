@@ -1,27 +1,23 @@
 #include "APathy.h"
-
-#include "APathy.h"
 #include <concepts>
 #include <string>
 #include <iostream>
+#include <chrono>
+
+// g++-11 -std=c++20 -g -Wall -O3 movies.cpp -o movies && ./movies
+using namespace std::chrono;
+void printDuration (const duration<double>& d) {
+  const auto ms = duration_cast<microseconds>(d);
+  std::cout << (float) ms.count() / 1000;
+}
 
 int GLOBAL_ID = 0;
 
-class Movie {
-public:
+struct Movie {
   std::string title;
   int id;
-  Movie(std::string t) :title(t) {
-    id = GLOBAL_ID++;
-  };
-  // ... other movie metadata
-  bool operator==(const Movie &vs) const {
-    if (vs.id == this->id) {
-      return true;
-    } else {
-      return false;
-    }
-  }
+  // // ... other movie metadata
+  auto operator<=>(const Movie&) const = default;
 };
 std::ostream& operator<<(std::ostream& os, const Movie& m) {
   os << m.title;
@@ -47,53 +43,86 @@ float basicHeuristic(Movie m) {
 int main() {
   struct MovieEdge {
     Movie src, dest;
-    // Similarity weight;
     float weight;
   };
-  Movie JP {"Jurrasic Park"};
-  Movie T {"Titanic"};
-  Movie C {"Coda"};
-  Movie HP {"Harry Potter"};
-  Movie AV {"Avengers"};
+  Movie JP{"Jurrasic Park"};
+  Movie T{"Titanic"};
+  Movie C{"Coda"};
+  Movie HP{"Harry Potter"};
+  Movie AV{"Avengers"};
+  Movie GF{"Godfather"};      //5
+  Movie KB{"Kill Bill"};      // 6
+  Movie SN{"Social Network"}; //7
+  Movie Z{"Zodiac"};          //8
+  Movie S{"Se7en"};           //9
   std::vector<Movie> movies = {
-    
+    JP, T, C, HP, AV, GF, KB, SN, Z, S
   };
   std::vector<MovieEdge> edges = {
     {movies[0], movies[1], 0.2},
     {movies[0], movies[3], 0.95},
     {movies[1], movies[4], 0.15},
-    {movies[3], movies[4], 0.85}
+    {movies[3], movies[4], 0.85},
+    {movies[0], movies[5], 0.2},
+    {movies[0], movies[7], 0.3},
+    {movies[8], movies[9], 0.95},
+    {movies[3], movies[5], 0.4},
+    {movies[8], movies[7], 0.7}
   };
 
-  Movie A = movies[0];
-  Movie F = movies[4];
+  auto start = high_resolution_clock::now();
+  APathy<MovieEdge, Movie, float> finder(edges, movies.size());
+  auto end = high_resolution_clock::now();
+  duration<double> diff = end - start;
+  std::cout << "Initialized *APathy* in ";
+  printDuration(diff);
+  std::cout << "ms\n";
 
-  APathy<MovieEdge, Movie, float> finder(edges, movies.size());;
-  // std::vector<Movie> sp = finder.Dijkstra(A, F);
+  start = high_resolution_clock::now();
+  std::vector<Movie> sp = finder.Dijkstra(JP, AV);
+  end = high_resolution_clock::now();
+  diff = end - start;
 
-  // std::cout << "Dijkstra found path: [ ";
-  // for (auto i : sp)
-  //   std::cout << i << ' ';
-  // std::cout << "]\n";
+  std::cout << "Dijkstra found path: [ ";
+  for (auto i : sp)
+    std::cout << i << ' ';
+  std::cout << "] in ";
+  printDuration(diff);
+  std::cout << "ms\n";
 
-  std::vector<Movie> sp = finder.AStar(A, F, &basicHeuristic);
+  start = high_resolution_clock::now();
+  sp = finder.AStar(JP, AV, &basicHeuristic);
+  end = high_resolution_clock::now();
+  diff = end - start;
 
   std::cout << "AStar found path: [ ";
   for (auto i : sp)
     std::cout << i << ' ';
-  std::cout << "]\n";
+  std::cout << "] in ";
+  printDuration(diff);
+  std::cout << "ms\n";
 
-  sp = finder.BreadthFirstSearch(A, F);
+  start = high_resolution_clock::now();
+  sp = finder.BreadthFirstSearch(JP, AV);
+  end = high_resolution_clock::now();
+  diff = end - start;
 
   std::cout << "BreadthFirstSearch found traversal: [ ";
   for (auto i : sp)
     std::cout << i << ' ';
-  std::cout << "]\n";
+  std::cout << "] in ";
+  printDuration(diff);
+  std::cout << "ms\n";
 
-  sp = finder.DepthFirstSearch(A, F);
+  start = high_resolution_clock::now();
+  sp = finder.DepthFirstSearch(JP, AV);
+  end = high_resolution_clock::now();
+  diff = end - start;
 
   std::cout << "DepthFirstSearch found traversal: [ ";
   for (auto i : sp)
     std::cout << i << ' ';
-  std::cout << "]\n";
+  std::cout << "] in ";
+  printDuration(diff);
+  std::cout << "ms\n";
 }
