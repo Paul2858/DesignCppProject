@@ -126,27 +126,27 @@ public:
 
     while (!stack.empty())
     {
-        ID s = stack.front();
-        int sIdx = getIdx(s);
-        if (s == target) {
-            path.push_back(s);
-            return path;
-        }
+      ID s = stack.front();
+      int sIdx = getIdx(s);
+      if (s == target) {
+        path.push_back(s);
+        return path;
+      }
 
-        stack.pop_front();
+      stack.pop_front();
 
-        if (!visited[sIdx])
-        {
-            path.push_back(s);
-            //std::cout << s << " ";
-            visited[sIdx] = true;
-        }
+      if (!visited[sIdx])
+      {
+        path.push_back(s);
+        //std::cout << s << " ";
+        visited[sIdx] = true;
+      }
 
-        for (auto i = adjList[sIdx].begin(); i != adjList[sIdx].end(); ++i)
-        {
-            if (!visited[(*i).first])
-                stack.push_back(vals[(*i).first]);
-        }
+      for (auto i = adjList[sIdx].begin(); i != adjList[sIdx].end(); ++i)
+      {
+        if (!visited[(*i).first])
+          stack.push_back(vals[(*i).first]);
+      }
     }
     return {};
   };
@@ -159,27 +159,27 @@ public:
 
       while (!stack.empty())
       {
-          ID s = stack.top();
-          int sIdx = getIdx(s);
-          if (s == target) {
-              path.push_back(s);
-              return path;
-          }
+        ID s = stack.top();
+        int sIdx = getIdx(s);
+        if (s == target) {
+          path.push_back(s);
+          return path;
+        }
 
-          stack.pop();
+        stack.pop();
 
-          if (!visited[sIdx])
-          {
-              path.push_back(s);
-              //std::cout << s << " ";
-              visited[sIdx] = true;
-          }
+        if (!visited[sIdx])
+        {
+          path.push_back(s);
+          //std::cout << s << " ";
+          visited[sIdx] = true;
+        }
 
-          for (auto i = adjList[sIdx].begin(); i != adjList[sIdx].end(); ++i)
-          {
-              if (!visited[(*i).first])
-                  stack.push(vals[(*i).first]);
-          }
+        for (auto i = adjList[sIdx].begin(); i != adjList[sIdx].end(); ++i)
+        {
+          if (!visited[(*i).first])
+            stack.push(vals[(*i).first]);
+        }
       }
       return {};
   };
@@ -187,7 +187,6 @@ public:
     using namespace std;
     typedef std::pair<int, W> Pair;
     int src = getIdx(start);
-    // std::vector<std::vector<int, W> > adj = adjList;
 
     int V = adjList.size();
 
@@ -223,7 +222,6 @@ public:
             // Get vertex label and weight of current adjacent of u.
             int v = (*i).first;
             int weight = (*i).second;
-            // printf("u, v, weight: %d %d %d\n", u, v, weight);
  
             //    If there is shorter path to v through u.
             if (dist[v] > dist[u] + weight)
