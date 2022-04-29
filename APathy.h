@@ -61,6 +61,7 @@ public:
     std::vector<ID> reconstructedPath;
 
     int startIdx = getIdx(start);
+    int endIdx   = getIdx(end);
     std::set<int> openSet {startIdx};
     std::set<int> closedSet;
 
@@ -73,7 +74,7 @@ public:
     while (openSet.size() > 0) {
       int n = -1;
       for (int v : openSet) {
-        if (n == -1 || (g[v] + 1 /* heuristic [v] */ < g[n] + 1 /* heuristic [n] */ )) {
+        if (n == -1 || (g[v] + 0 /* heuristic [v] */ < g[n] + 0 /* heuristic [n] */ )) {
           n = v;
         }
       }
@@ -81,7 +82,7 @@ public:
       if (n == -1) {
         return reconstructedPath;
       }
-      if (vals[n] == end) {
+      if (n == endIdx) {
         while (parents[n] != n) {
           reconstructedPath.push_back(vals[n]);
           n = parents[n];
@@ -93,8 +94,8 @@ public:
       for (auto &pair : adjList[n]) {
         int m = pair.first;
         W weight = pair.second;
-        if (std::find(openSet.begin(), openSet.end(), m) == openSet.end() ||
-            std::find(closedSet.begin(), openSet.end(), m) == closedSet.end()) {
+        if (std::find(openSet.begin(), openSet.end(), m) == openSet.end() &&
+            std::find(closedSet.begin(), closedSet.end(), m) == closedSet.end()) {
           openSet.insert(m);
           parents[m] = n;
           g[m] = g[n] + weight;
@@ -125,7 +126,7 @@ public:
 
     while (!stack.empty())
     {
-        ID s = stack.back();
+        ID s = stack.front();
         int sIdx = getIdx(s);
         if (s == target) {
             path.push_back(s);
