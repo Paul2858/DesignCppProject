@@ -6,15 +6,11 @@ CXXFLAGS = -g -Wall $(INCLUDES) -std=c++20 -O3
 LDFLAGS  = -g
 LDLIBS   =
 
-main: main.o Graph.o PathFinder.o
-main.o: main.cpp Graph.h PathFinder.h
-
-Graph.o: Graph.cpp Graph.h
-
-PathFinder.o: PathFinder.cpp PathFinder.h
+main: main.o
+main.o: main.cpp
 
 test-concepts: test-concepts.o
-test-concepts.o: APathy.cpp test-concepts.cpp
+test-concepts.o: test-concepts.cpp
 
 # clean removes intermediate files
 # PHONY = not a file
