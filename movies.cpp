@@ -71,7 +71,11 @@ int main() {
   };
 
   auto start = high_resolution_clock::now();
+
+
   APathy<MovieEdge, Movie, float> finder(edges, movies.size());
+
+
   auto end = high_resolution_clock::now();
   duration<double> diff = end - start;
   std::cout << "Initialized *APathy* in ";
@@ -79,7 +83,11 @@ int main() {
   std::cout << "ms\n";
 
   start = high_resolution_clock::now();
+
+
   std::vector<Movie> sp = finder.Dijkstra(JP, AV);
+
+
   end = high_resolution_clock::now();
   diff = end - start;
 
@@ -91,7 +99,11 @@ int main() {
   std::cout << "ms\n";
 
   start = high_resolution_clock::now();
+
+
   sp = finder.AStar(JP, AV, &basicHeuristic);
+
+
   end = high_resolution_clock::now();
   diff = end - start;
 
@@ -103,7 +115,11 @@ int main() {
   std::cout << "ms\n";
 
   start = high_resolution_clock::now();
+
+
   sp = finder.BreadthFirstSearch(JP, AV);
+
+
   end = high_resolution_clock::now();
   diff = end - start;
 
@@ -115,7 +131,11 @@ int main() {
   std::cout << "ms\n";
 
   start = high_resolution_clock::now();
+
+
   sp = finder.DepthFirstSearch(JP, AV);
+
+
   end = high_resolution_clock::now();
   diff = end - start;
 
