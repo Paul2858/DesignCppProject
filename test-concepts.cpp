@@ -57,6 +57,11 @@ std::ostream& operator<<(std::ostream& os, const Point& pt) {
   os << pt.id;
   return os;
 };
+
+float basicHeuristic(Point p) {
+  return 0;
+};
+
 int main() {
   /* EXAMPLE 1 strings as node ids */
   // struct StringEdge {
@@ -122,7 +127,7 @@ int main() {
   // finder.printVals();
   // std::cout << "ADJACENCY LIST:\n";
   // finder.printAdjList();
-  std::vector<Point> sp = finder.AStar(A, F);
+  std::vector<Point> sp = finder.AStar(A, F, &basicHeuristic);
   // std::cout << "BFS:\n";
   // std::vector<Point> sp = finder.BreadthFirstSearch(A, F);
   // std::cout << "Found path: [ ";

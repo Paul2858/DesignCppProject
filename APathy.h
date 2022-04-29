@@ -57,7 +57,7 @@ public:
       adjList[foundSrc].push_back(std::make_pair(foundDest, edge.weight));
     }
   };
-  std::vector<ID> AStar(ID start, ID end) {
+  std::vector<ID> AStar(ID start, ID end, W (*h)(ID)) {
     std::vector<ID> reconstructedPath;
 
     int startIdx = getIdx(start);
@@ -74,7 +74,7 @@ public:
     while (openSet.size() > 0) {
       int n = -1;
       for (int v : openSet) {
-        if (n == -1 || (g[v] + 0 /* heuristic [v] */ < g[n] + 0 /* heuristic [n] */ )) {
+        if (n == -1 || (g[v] + h(vals[v]) < g[n] + h(vals[n]) )) {
           n = v;
         }
       }
